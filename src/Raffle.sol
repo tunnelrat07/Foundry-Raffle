@@ -71,7 +71,7 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     uint256 private immutable i_subscriptionId;
     uint32 private immutable i_callbackGasLimit;
     address private s_recentWinner;
-    RaffleState private s_raffleState;
+    RaffleState private s_raffleState; // should start as open
     // keeping a track of the lottery's current state
     // but we create an enum instead of a bool , incase our lottery has many different states that we wanna keep track of
     /* bool private s_calculatingWinner = false;  */
@@ -255,5 +255,13 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     */
     function getEntranceFee() external view returns (uint256) {
         return i_entranceFee;
+    }
+
+    function getRaffleState() external view returns (RaffleState) {
+        return s_raffleState;
+    }
+
+    function getPlayer(uint256 indexOfPlayer) external view returns (address) {
+        return s_players[indexOfPlayer];
     }
 }

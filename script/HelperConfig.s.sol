@@ -77,7 +77,7 @@ contract HelperConfig is CodeConstants, Script {
             // here gasLane doesnt matter
             gasLane: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
             callbackGasLimit: 500000,
-            subscriptionId: 0
+            subscriptionId: 0 // we'll refactor our code such that everytime it sees that the subscription id ==0 , it will programatically create a new subscription and add a valid consumer
         });
         return localNetworkConfig;
     }
