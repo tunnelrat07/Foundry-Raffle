@@ -15,24 +15,26 @@ contract DeployRaffle is Script {
         // local -> deploy mocks, get local config
         // sepolia -> get sepolia config
         HelperConfig.NetworkConfig memory config = helperConfig.getConfig();
-
+        address account = config.account;
         // if the subscriptionId of the config.subscriptionId ==0 , go ahead and programmatically create a subscripttion
         if (config.subscriptionId == 0) {
             // create subscription
             CreateSubscription createSubscription = new CreateSubscription();
             (config.subscriptionId, config.vrfCoordinator) = createSubscription
-                .createSubscription(config.vrfCoordinator);
+                .createSubscription(config.vrfCoordinator, account);
 
             // Fund it
             FundSubscription fundSubscription = new FundSubscription();
             fundSubscription.fundSubscription(
                 config.vrfCoordinator,
                 config.subscriptionId,
-                config.link
+                config.link,
+                config.account
             );
         }
 
-        vm.startBroadcast();
+        // making the broadcasters address more modular
+        vm.startBroadcast(account);
         Raffle raffle = new Raffle(
             config.entranceFee,
             config.interval,
@@ -48,7 +50,8 @@ contract DeployRaffle is Script {
         addConsumer.addConsumer(
             address(raffle),
             config.vrfCoordinator,
-            config.subscriptionId
+            config.subscriptionId,
+            account
         );
         return (raffle, helperConfig);
     }

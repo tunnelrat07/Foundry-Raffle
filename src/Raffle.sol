@@ -89,6 +89,7 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     // A maximum of 3 parameters in an event can be indexed.
     event RaffleEntered(address indexed player);
     event WinnerPicked(address indexed winner);
+    event RequestedRaffleWinner(uint256 indexed requestId);
 
     /* 
     ==========Modifiers==========
@@ -218,7 +219,8 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
         // Get our random Number ChainlinkVRF2.5
         // 1. Request RNG
         // 2. Get RNG
-        /* uint256 requestId = */ s_vrfCoordinator.requestRandomWords(request);
+        uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
+        emit RequestedRaffleWinner(requestId);
     }
 
     // randomwords[] is an array with a single element -> the random word that is generated
@@ -263,5 +265,13 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
 
     function getPlayer(uint256 indexOfPlayer) external view returns (address) {
         return s_players[indexOfPlayer];
+    }
+
+    function getLastTimeStamp() external view returns (uint256) {
+        return s_lastTimeStamp;
+    }
+
+    function getRecentWinner() external view returns (address) {
+        return s_recentWinner;
     }
 }
