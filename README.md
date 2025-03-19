@@ -30,7 +30,7 @@ foundryup
 
 Clone the repository:
 ```sh
-git clone <your-repo-url>
+git clone https://github.com/tunnelrat07/Foundry-Raffle.git
 cd raffle-contract
 ```
 
